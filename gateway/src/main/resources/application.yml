@@ -1,0 +1,44 @@
+server:
+  port: 9999
+
+spring:
+  application:
+    name: Gateway
+  cloud:
+    gateway:
+      routes:
+        - id: SearchService
+          uri: lb://SearchService
+          predicates:
+                    - Path=/search/**
+
+        - id: SearchService
+          uri: lb://SearchService
+          predicates:
+            - Path=/customers/**
+
+        - id: ResturantService
+          uri: lb://ResturantService
+          predicates:
+            - Path=/resturant/**
+
+        - id: DistancesService
+          uri: lb://DistancesService
+          predicates:
+            - Path=/distance/**
+
+        - id: SaveService
+          uri: lb://SaveService
+          predicates:
+            - Path=/save/**
+  profiles.active: zone1
+
+eureka:
+  client:
+    prefer-same-zone-eureka: true
+    region: region-1
+    service-url:
+      zone1: http://localhost:8761/eureka/
+      zone2: http://127.0.0.1:8762/eureka/
+    availability-zones:
+      region-1: zone1,zone2
